@@ -1,7 +1,11 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:task/model/loginModel.dart';
+import 'package:task/screen/home.dart';
 import 'package:task/utils/text_utils.dart';
 import 'package:task/widgets/textbox.dart';
 
@@ -14,8 +18,8 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  String _userNameValue = "";
-  String _passwordValue = "";
+  String _userNameValue = "akadir@test.com";
+  String _passwordValue = "1q2w3e4r5t**";
 
   final Dio _dio = Dio();
 
@@ -63,9 +67,9 @@ class _LoginState extends State<Login> {
                       child: TextUtils(text: "Login", size: 30, color: Colors.white, weight: true),
                     ),
                     Spacer(),
-                    CustomTextFormField(label: 'Kullanıcı adı veya mail', onChanged: _onTextChanged),
+                    CustomTextFormField(label: 'Kullanıcı adı veya mail', onChanged: _onTextChanged, initialValue: "akadir@test.com",),
                     SizedBox(height: 10,),
-                    CustomTextFormField(label: 'Şifre', onChanged: _onPasswordChanged, obscure: true,),
+                    CustomTextFormField(label: 'Şifre', onChanged: _onPasswordChanged, obscure: true,initialValue: "1q2w3e4r5t**",),
                     SizedBox(height: 10),
                     Row(
                       children: [
@@ -116,7 +120,7 @@ class _LoginState extends State<Login> {
     final String password = _passwordValue;
 
     try {
-      final response = await _dio.post(
+      final response =  await _dio.post(
         'http://157.173.101.211:8080/auth/login', // Replace with your API URL
         data: {
           'username': username,
@@ -127,10 +131,19 @@ class _LoginState extends State<Login> {
 
       if (response.statusCode == 200) {
         // Successful login
+        var body =  LoginResponseModel.fromJson(response.data);
 
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString("token", body.token.toString());
+        await prefs.setString("id", body.id.toString());
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Login successful!')),
         );
+        MaterialPageRoute pageRoute = MaterialPageRoute(builder: (_)  {
+          return const HomeScreen();
+        });
+
+        Navigator.pushReplacement(context, pageRoute);
       } else {
         // Handle login error
         ScaffoldMessenger.of(context).showSnackBar(
@@ -146,4 +159,6 @@ class _LoginState extends State<Login> {
   }
 
 }
+
+
 

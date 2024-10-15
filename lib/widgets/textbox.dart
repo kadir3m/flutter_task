@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 class CustomTextFormField extends StatefulWidget {
   final String label; // Başlangıç değeri için
+  final String initialValue; // Başlangıç değeri için
+  Color? color; // Başlangıç değeri için
   final Function(String) onChanged; // Veri almak için callback
    bool? obscure;
 
@@ -9,6 +11,9 @@ class CustomTextFormField extends StatefulWidget {
     super.key,
     required this.label,
     required this.onChanged,
+    required this.initialValue,
+     this.color,
+
     this.obscure
   });
 
@@ -22,7 +27,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController(text: '');
+    _controller = TextEditingController(text: widget.initialValue);
   }
 
   @override
@@ -36,19 +41,19 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
     return TextFormField(
       obscureText: widget.obscure ?? false,
       controller: _controller,
-      style: TextStyle(color: Colors.white),
+      style: TextStyle(color: widget.color ??Colors.white),
       onChanged: widget.onChanged, // Değer değiştikçe veriyi yukarı taşır
       decoration: InputDecoration(
         labelText: widget.label,
-        labelStyle: TextStyle(color: Colors.white),
+        labelStyle: TextStyle(color: widget.color ?? Colors.white),
         enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.white, width: 2)
+            borderSide: BorderSide(color:widget.color ?? Colors.white, width: 2)
         ),
         focusedBorder:OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.white, width: 2)
+            borderSide: BorderSide(color: widget.color ??Colors.white, width: 2)
         ) ,
         border: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white, width: 2)
+          borderSide: BorderSide(color: widget.color ??Colors.white, width: 2)
         ),
       ),
     );
