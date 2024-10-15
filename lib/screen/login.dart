@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:task/utils/text_utils.dart';
 import 'package:task/widgets/textbox.dart';
@@ -16,17 +17,17 @@ class _LoginState extends State<Login> {
   String _userNameValue = "";
   String _passwordValue = "";
 
+  final Dio _dio = Dio();
+
   void _onTextChanged(String newValue) {
     setState(() {
       _userNameValue = newValue;
-      print("user "+_userNameValue);
     });
   }
 
   void _onPasswordChanged(String newValue) {
     setState(() {
       _passwordValue = newValue;
-      print("pass "+_passwordValue);
     });
   }
 
@@ -62,9 +63,10 @@ class _LoginState extends State<Login> {
                       child: TextUtils(text: "Login", size: 30, color: Colors.white, weight: true),
                     ),
                     Spacer(),
-                    CustomTextFormField(label: 'Username', onChanged: _onTextChanged),
+                    CustomTextFormField(label: 'Kullanıcı adı veya mail', onChanged: _onTextChanged),
                     SizedBox(height: 10,),
-                    CustomTextFormField(label: 'Password', onChanged: _onPasswordChanged, obscure: true,),
+                    CustomTextFormField(label: 'Şifre', onChanged: _onPasswordChanged, obscure: true,),
+                    SizedBox(height: 10),
                     Row(
                       children: [
                         Container(
@@ -74,20 +76,31 @@ class _LoginState extends State<Login> {
 
                         ),
                         SizedBox(width: 10),
-                        Expanded(child: TextUtils(text: "Remember Me, Forget Password", size: 12, weight: true)),
+                        Expanded(child: TextUtils(text: "Beni Hatırla", size: 12, weight: true)),
                         Spacer(),
 
                         Container()
                       ],
                     ),
+                    SizedBox(height: 10),
                     SizedBox(
                       height: 40,
                       width: 200,
                       child: ElevatedButton(
                           onPressed: () async {
+                            _login();
                           },
                           child: const Text("Giriş")),
                     ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text("Hesabınız yok mu?"),
+                        TextButton(onPressed: () => {}, child: Text("Kayıt Ol"), style: TextButton.styleFrom(
+                          foregroundColor: Colors.white
+                        )),
+                      ],
+                    )
                   ],
                 ),
               )),
@@ -97,4 +110,40 @@ class _LoginState extends State<Login> {
       ),
     );
   }
+
+  void _login() async {
+    final String username = _userNameValue;
+    final String password = _passwordValue;
+
+    try {
+      final response = await _dio.post(
+        'http://157.173.101.211:8080/auth/login', // Replace with your API URL
+        data: {
+          'username': username,
+          'password': password,
+        },
+      );
+      debugPrint(username);
+
+      if (response.statusCode == 200) {
+        // Successful login
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Login successful!')),
+        );
+      } else {
+        // Handle login error
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Invalid credentials')),
+        );
+      }
+    } catch (e) {
+      // Handle errors
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e')),
+      );
+    }
+  }
+
 }
+
