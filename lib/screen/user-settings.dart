@@ -66,16 +66,23 @@ class _UserSettingsState extends State<UserSettings> {
   child: Column(
     crossAxisAlignment: CrossAxisAlignment.start,
   children: [
-    Center(
-      child: CircleAvatar(
-        radius: 50,
-        backgroundImage:  showFoto(),
-        child: decodedImage == null ? Icon(Icons.person, size: 50, color: Colors.white,) : null,
 
+    Center(
+      child: Column(
+        children: [
+          CircleAvatar(
+            radius: 50,
+            backgroundImage:  showFoto(),
+            child: decodedImage == null ? Icon(Icons.person, size: 50, color: Colors.white,) : null,
+
+          ),
+          TextButton(onPressed: _pickImage, child: Text("Resmi düzenle",style: TextStyle(color: Colors.blue),)),
+
+        ],
       ),
     ),
 
-    TextButton(onPressed: _pickImage, child: Text("Resmi düzenle",style: TextStyle(color: Colors.blue),)),
+
   SizedBox(height: 14,),
   RowFlex("Adı", userResponseModel.name.toString()),
   RowFlex("Soyadı", userResponseModel.surname.toString()),
