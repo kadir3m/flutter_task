@@ -93,31 +93,37 @@ class _UserSettingsState extends State<UserSettings> {
 
   );
 }
+  onTapRow() {
+    print("tapp");
+  }
 Widget RowFlex(String title, String value) {
-    return  Row(
-      children: [
-        Expanded(
-          flex: 2,
-          child:  Text(title, style: TextStyle(color: Colors.white, fontSize: 16)),
+    return  InkWell(
+      onTap: () {
+        print(value);
+      },
+      child: Row(
+        children: [
+          Expanded(
+            flex: 2,
+            child:  Container(
+                child: Text(title, style: TextStyle(color: Colors.white, fontSize: 16))),
 
-        ),
-        Expanded(
-            flex: 4,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  child: Text(value, textAlign: TextAlign.start,style: TextStyle(color: Colors.white, fontSize: 16),),
+          ),
+          Expanded(
+              flex: 4,
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 12),
+                child: Text(
+                    value,
+                    textAlign: TextAlign.start,
+                    style: TextStyle(color: Colors.white, fontSize: 16)),
+                decoration: BoxDecoration(
+                  border: Border(bottom: BorderSide(color: Colors.white, width: 0.3))
                 ),
-                Container(
-                  height: 0.3,
-                  color: Color(0xFFBDBDBD),
-                  margin: EdgeInsets.only(top: 8, bottom: 8),
-                )
-              ],
-            )
-        )
-      ],
+              )
+          )
+        ],
+      ),
     );
 }
 showFoto() {
