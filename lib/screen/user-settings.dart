@@ -44,51 +44,74 @@ class _UserSettingsState extends State<UserSettings> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Profilim"),
-      ),
-drawer: CustomDrawer(),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: isReady ? FormView() : Container()
+    return MaterialApp(
+      theme: ThemeData.dark(),
+      home: Scaffold(
+
+        appBar: AppBar(
+          title: Text("Profilim"),
+        ),
+      drawer: CustomDrawer(),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: isReady ? FormView() : Container()
+        ),
       ),
     );
   }
 
   Widget FormView() {
-    return Form(
-  child: ListView(
+    return Padding(
+      padding: EdgeInsets.all(10),
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
   children: [
-    CircleAvatar(
-      radius: 50,
-      backgroundImage:  showFoto(),
-      child: decodedImage == null ? Icon(Icons.person, size: 50) : null,
+    Center(
+      child: CircleAvatar(
+        radius: 50,
+        backgroundImage:  showFoto(),
+        child: decodedImage == null ? Icon(Icons.person, size: 50, color: Colors.white,) : null,
 
+      ),
     ),
 
-    IconButton(
-      icon: Icon(Icons.camera_alt),
-      color: Colors.black,
-      onPressed: _pickImage,
-      padding: EdgeInsets.all(8),
-      iconSize: 30,
-      splashRadius: 25,
-      tooltip: 'Edit Profile Photo',
-    ),
-  CustomTextFormField(label: "Adı", onChanged: (context) {
-  }, initialValue: userResponseModel.name.toString(), color: Colors.black,),
-  SizedBox(height: 10,),
-  CustomTextFormField(label: "Soyadı", onChanged: (context) {
-  }, initialValue: userResponseModel.surname.toString(), color: Colors.black,),
-SizedBox(height: 10),
-    CustomTextFormField(label: "Email", onChanged: (context) {
-    }, initialValue: userResponseModel.email.toString(), color: Colors.black,),
-
+    TextButton(onPressed: _pickImage, child: Text("Resmi düzenle",style: TextStyle(color: Colors.blue),)),
+  SizedBox(height: 14,),
+  RowFlex("Adı", userResponseModel.name.toString()),
+  RowFlex("Soyadı", userResponseModel.surname.toString()),
+  RowFlex("Kullanıcı adı", userResponseModel.username.toString()),
+  RowFlex("E-mail", userResponseModel.email.toString()),
   ],
   ),
 
   );
+}
+Widget RowFlex(String title, String value) {
+    return  Row(
+      children: [
+        Expanded(
+          flex: 2,
+          child:  Text(title, style: TextStyle(color: Colors.white, fontSize: 16)),
+
+        ),
+        Expanded(
+            flex: 4,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  child: Text(value, textAlign: TextAlign.start,style: TextStyle(color: Colors.white, fontSize: 16),),
+                ),
+                Container(
+                  height: 0.3,
+                  color: Color(0xFFBDBDBD),
+                  margin: EdgeInsets.only(top: 8, bottom: 8),
+                )
+              ],
+            )
+        )
+      ],
+    );
 }
 showFoto() {
    if(_image != null) {
