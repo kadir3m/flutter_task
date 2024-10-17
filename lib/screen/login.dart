@@ -1,4 +1,4 @@
-import 'dart:convert';
+
 import 'dart:ui';
 
 import 'package:dio/dio.dart';
@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task/model/loginModel.dart';
 import 'package:task/screen/home.dart';
+import 'package:task/screen/register.dart';
 import 'package:task/utils/text_utils.dart';
 import 'package:task/widgets/textbox.dart';
 
@@ -94,13 +95,20 @@ class _LoginState extends State<Login> {
                           onPressed: () async {
                             _login();
                           },
-                          child: const Text("Giriş")),
+                          child: const Text("Giriş", style: TextStyle(color: Colors.white),)),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text("Hesabınız yok mu?"),
-                        TextButton(onPressed: () => {}, child: Text("Kayıt Ol"), style: TextButton.styleFrom(
+                        TextButton(onPressed: () => {
+                        Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                        builder: (context) =>
+                        const RegisterScreen(),
+                        ),
+                        ),
+                        }, child: Text("Kayıt Ol"), style: TextButton.styleFrom(
                           foregroundColor: Colors.white
                         )),
                       ],

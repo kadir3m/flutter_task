@@ -41,4 +41,15 @@ class UserResponseModel {
     data['hashedPassword'] = this.hashedPassword;
     return data;
   }
+
+  void setValue(String key, dynamic value) {
+    if (key == 'name') {
+      name = value;
+    } else if (key == 'surname') {
+      surname = value;
+    } else if (key == 'email') {
+      email = value;
+    }
+  }
 }
+

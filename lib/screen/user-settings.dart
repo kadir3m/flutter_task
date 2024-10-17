@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task/screen/drawer.dart';
+import 'package:task/screen/edit-user.dart';
 import 'package:task/widgets/textbox.dart';
 
 import '../model/userModel.dart';
@@ -25,7 +26,7 @@ class _UserSettingsState extends State<UserSettings> {
   String? _base64Image;
   Uint8List? decodedImage;
 
-  final userResponseModel = new UserResponseModel(
+  final   userResponseModel = new UserResponseModel(
     name: "",
     surname: "",
     username: "",
@@ -52,7 +53,7 @@ class _UserSettingsState extends State<UserSettings> {
           title: Text("Profilim"),
         ),
       drawer: CustomDrawer(),
-        body: Padding(
+        body: !isReady ? Center(child: CircularProgressIndicator()) :  Padding(
           padding: const EdgeInsets.all(8.0),
           child: isReady ? FormView() : Container()
         ),
@@ -84,10 +85,10 @@ class _UserSettingsState extends State<UserSettings> {
 
 
   SizedBox(height: 14,),
-  RowFlex("Adı", userResponseModel.name.toString()),
-  RowFlex("Soyadı", userResponseModel.surname.toString()),
-  RowFlex("Kullanıcı adı", userResponseModel.username.toString()),
-  RowFlex("E-mail", userResponseModel.email.toString()),
+  RowFlex("Adı", userResponseModel.name.toString(), 'name', userResponseModel),
+  RowFlex("Soyadı", userResponseModel.surname.toString(), 'surname', userResponseModel),
+  RowFlex("Kullanıcı adı", userResponseModel.username.toString(), 'username', userResponseModel),
+  RowFlex("E-mail", userResponseModel.email.toString(), 'email', userResponseModel),
   ],
   ),
 
@@ -96,10 +97,15 @@ class _UserSettingsState extends State<UserSettings> {
   onTapRow() {
     print("tapp");
   }
-Widget RowFlex(String title, String value) {
+Widget RowFlex(String title, String value, String key, data) {
     return  InkWell(
       onTap: () {
-        print(value);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EditUser(label: title, data: data, pKey: key),
+          ),
+        );
       },
       child: Row(
         children: [
