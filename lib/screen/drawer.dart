@@ -14,12 +14,17 @@ class _CustomDrawer extends State<CustomDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          const DrawerHeader(child: Text("Drawer Başlık"),
+          const DrawerHeader(
+            child: CircleAvatar(
+child:  Icon(Icons.person, size: 50, color: Colors.white,),
+            ),
             decoration: BoxDecoration(
-                color: Colors.lightBlueAccent
+
+
             ),),
           ListTile(
             title: Text("Profilim"),

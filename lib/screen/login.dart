@@ -148,9 +148,9 @@ class _LoginState extends State<Login> {
         final SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString("token", body.token.toString());
         await prefs.setString("id", body.id.toString());
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Login successful!')),
-        );
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(content: Text('Login successful!')),
+        // );
         MaterialPageRoute pageRoute = MaterialPageRoute(builder: (_)  {
           return const HomeScreen();
         });

@@ -46,10 +46,8 @@ class _UserSettingsState extends State<UserSettings> {
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      backgroundColor: Colors.black87,
         appBar: AppBar(
-          title: Text("Profilim", style: TextStyle(color: Colors.white),),
-          backgroundColor: Colors.black87,
+          title: Text("Profilim"),
         ),
       drawer: CustomDrawer(),
         body: !isReady ? Center(child: CircularProgressIndicator()) :  Padding(
@@ -110,7 +108,7 @@ Widget RowFlex(String title, String value, String key, data) {
           Expanded(
             flex: 2,
             child:  Container(
-                child: Text(title, style: TextStyle(color: Colors.white, fontSize: 16))),
+                child: Text(title, style: TextStyle( fontSize: 16))),
 
           ),
           Expanded(
@@ -120,9 +118,9 @@ Widget RowFlex(String title, String value, String key, data) {
                 child: Text(
                     value,
                     textAlign: TextAlign.start,
-                    style: TextStyle(color: Colors.white, fontSize: 16)),
+                    style: TextStyle(fontSize: 16)),
                 decoration: BoxDecoration(
-                  border: Border(bottom: BorderSide(color: Colors.white, width: 0.3))
+                  border: Border(bottom: BorderSide( width: 0.3))
                 ),
               )
           )
