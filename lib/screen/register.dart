@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:task/model/signupModel.dart';
 import 'package:task/screen/login.dart';
@@ -15,6 +16,9 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  final Dio _dio = Dio();
+  var isLoading = false;
+
   SignupModel user = new SignupModel(
       username: "",
       email: "",
@@ -98,27 +102,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
         decoration: BoxDecoration(
             image: DecorationImage(image: AssetImage('assets/bg2.jpeg'), fit: BoxFit.fill )
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            height: double.infinity,
-            decoration: BoxDecoration(
-                border: Border.all(color: Colors.white),
-                borderRadius: BorderRadius.circular(15),
-                color: Colors.white.withOpacity(0.1)
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaY: 5, sigmaX: 5),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+        child: Container(
+
+          height: double.infinity,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+              color: Colors.white.withOpacity(0.1)
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaY: 5, sigmaX: 5),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+                  child: Center(
                     child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Center(
                           child: TextUtils(text: "Kayıt", size: 30, color: Colors.white, weight: true),
                         ),
+                        SizedBox(height: 14,),
                         CustomTextFormField(label: 'Adı', onChanged: (String value) {
                           setState(() {
                             user.name = value;
@@ -149,33 +154,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           });
                         }, initialValue: '',obscure: true,),
                         SizedBox(height: 10,),
-                        Row(
-                          children: [
-                            Container(
-                              height: 15,
-                              width: 15,
-                              color: Colors.white,
-
-                            ),
-                            SizedBox(width: 10),
-                            Expanded(child: TextUtils(text: "Beni Hatırla", size: 12, weight: true)),
-                            Spacer(),
-
-                            Container()
-                          ],
-                        ),
                         SizedBox(height: 10),
-                        SizedBox(
-                          height: 40,
-                          width: 200,
-                          child: ElevatedButton(
-                              onPressed: () async {
-                                // _login();
-                              },
-                              child: const Text("Kayıt Ol", style: TextStyle(color: Colors.white),)),
+                        Center(
+                          child: SizedBox(
+                            height: 40,
+                            width: 200,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.blue, // Change the background color
+                                foregroundColor: Colors.white, // Change the text (foreground) color
+                              ),
+                                onPressed: () async {
+                                  _register();
+                                },
+                                child: const Text("Kayıt Ol", style: TextStyle(color: Colors.white),)),
+                          ),
                         ),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text("Zaten bir hesabınız var mı?"),
                             TextButton(onPressed: () => {
@@ -193,11 +189,36 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         )
                       ],
                     ),
-                  )),
-            ),
+                  ),
+                )),
           ),
         ),
       ),
     );
+  }
+
+  _register() async{
+    this.isLoading = true;
+    try {
+      final response =  await _dio.post(
+        'http://157.173.101.211:8080/auth/signup', // Replace with your API URL
+        data: user.toJson()
+      );
+   this.isLoading = false;
+
+      if (response.statusCode == 200) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) =>
+            const Login(),
+          ),
+        );
+      }
+      }catch (e) {
+      // Handle errors
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e')),
+      );
+    }
   }
 }

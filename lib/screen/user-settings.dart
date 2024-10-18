@@ -45,20 +45,18 @@ class _UserSettingsState extends State<UserSettings> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData.dark(),
-      home: Scaffold(
-
+    return  Scaffold(
+      backgroundColor: Colors.black87,
         appBar: AppBar(
-          title: Text("Profilim"),
+          title: Text("Profilim", style: TextStyle(color: Colors.white),),
+          backgroundColor: Colors.black87,
         ),
       drawer: CustomDrawer(),
         body: !isReady ? Center(child: CircularProgressIndicator()) :  Padding(
           padding: const EdgeInsets.all(8.0),
           child: isReady ? FormView() : Container()
         ),
-      ),
-    );
+      );
   }
 
   Widget FormView() {

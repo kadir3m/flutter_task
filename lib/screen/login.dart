@@ -95,6 +95,10 @@ class _LoginState extends State<Login> {
                           onPressed: () async {
                             _login();
                           },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue, // Change the background color
+                            foregroundColor: Colors.white, // Change the text (foreground) color
+                          ),
                           child: const Text("Giriş", style: TextStyle(color: Colors.white),)),
                     ),
                     Row(
